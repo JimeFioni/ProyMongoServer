@@ -1,7 +1,7 @@
 const {Alimento} = require('../models/model');
-const {Cliente} = require('../models/cliente');
-const {validationResult} = require("express-validator");
-const {validarId} = require('../middleware/validation');
+const req= require('express/lib/request');
+const {check, validationResult, body} = require("express-validator");
+//const {validar} = require('../middleware/validation');
 
 const vistaUno = (req, res)=>{
     res.render('index', { title: 'Express' });
@@ -31,16 +31,18 @@ const crearAlimento = async (req, res)=>{
         }else{
             res.status(501).json(error)
         }
-    }catch(error){
-        res.status(501).json({msg: "Alimento No Cargado..."})
+    }catch(err){
+        res.status(501).json({msg: "Alimento No Cargado..."},err)
     }
 };
 
 const editarAlimento= async (req, res) =>{
+    const{id} = req.params
+    
     try{
-        const{id} = req.params
-        const valores =req.body.valores
-        await Alimento.findByIdAndUpdate(id, req.body)
+        let alimento = await Alimento.findByIdAndUpdate(id, req.body)
+        if (alimento === null){res.json({msg:"No se edito correctamente"})}
+
         res.status(202).json({msg:"Se edito el Alimento correctamente", valores})
     }catch (error) {
         res.status(501).json({msg:"No se edito el Alimento",error})
@@ -50,7 +52,10 @@ const editarAlimento= async (req, res) =>{
 const eliminarAlimento = async (req, res) =>{
     try{
         const alimento = await Alimento.findByIdAndDelete(req.params.id)
+        if (alimento=== null) {res.json({msg:"No se logro eliminar el Alimento"})}
+
         res.json({msg:"Elimino el Alimento", alimento})
+
     }catch (error) {
         res.status(400).json({msg:"No se logro eliminar el Alimento", error})
     }
