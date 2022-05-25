@@ -12,7 +12,7 @@ const vistaUnAlimento= async (req, res) =>{
         const alimento =await Alimento.findById(req.params.id)
         res.json({alimento})
     }catch (error) {
-        res.status(400).json({msg:"No existe el Alimento",error})
+        res.status(400).json({msg:"No existe el id Alimento",error})
     }
 };
 
@@ -37,15 +37,17 @@ const crearAlimento = async (req, res)=>{
 };
 
 const editarAlimento= async (req, res) =>{
-    const{id} = req.params
-    
     try{
-        let alimento = await Alimento.findByIdAndUpdate(id, req.body)
-        if (alimento === null){res.json({msg:"No se edito correctamente"})}
-
-        res.status(202).json({msg:"Se edito el Alimento correctamente", valores})
-    }catch (error) {
-        res.status(501).json({msg:"No se edito el Alimento",error})
+        const error= validationResult(req)
+        if (error.isEmpty()){
+            const{id} = req.params
+            const nuevoAlimento = await Alimento.findByIdAndUpdate(id, req.body)
+            res.status(201).json({msg:"Alimento editado correctamente", nuevoAlimento})
+        }else{
+            res.status(501).json(error)
+        }
+    } catch {
+        res.status(501).json({msg:"Error al editar", error})
     }
 };
 
