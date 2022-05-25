@@ -1,2 +1,2 @@
 # mongoServer
-Ejemplo para comenzar con mongoDB
+Proyecto para Backend con MongoDB

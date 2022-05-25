@@ -5,17 +5,17 @@ const storeSchema = new Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
     },
-    breed: {
+    alimentoComprado: {
         type: String,
         required: true,
     },
-    packaging: {
-        type: String,
+    
+    phone: {
+        type : Number,
         required: true,
-    },
+    }
 });
-const Alimento = mongoose.model('Alimento', storeSchema);
+const Cliente = mongoose.model('Cliente', storeSchema);
 
-module.exports = {Alimento}
+module.exports = {Cliente}
